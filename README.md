@@ -63,3 +63,99 @@ The app defines following CRUD APIs.
     DELETE /api/users/{id}
 
 You can test them using Postman or any other rest client.
+
+## Run the application as a docker container
+
+**1. Create the Docker Image using command from the directory where Dockerfile is placed.**
+
+This command instruct Docker to create the image of our application and tagged it as user-app:
+
+```bash
+docker build -t user-app .
+```
+
+**2. Starting the MySQL container**
+
+To start MySQL, we need MySQL Docker image. We can pull the same from Docker Hub. Note that Docker Hub is the repository which contains the images of existing software. Note that we are using latest version of MySQL.
+
+```bash
+docker pull mysql:latest
+```
+
+**3. Run MySQL as docker container with container name as localhost, database name user_db, username root and password as 1234**
+
+```bash
+docker run --name localhost -e MYSQL_ROOT_PASSWORD=1234 -e MYSQL_DATABASE=user_db -e MYSQL_USER=appuser -e MYSQL_PASSWORD=1234 -d mysql:latest
+```
+
+**4. Run the Sprint Boot application user-app in the same manner using the following command:**
+
+```bash
+docker run -d -p 8089:8089 --name user-app --link localhost:mysql user-app
+```
+
+##Useful commands:
+```bash
+docker container ls => List the active containers
+docker container stop <container-name> => Stops the container
+docker container rm <container-name> => Remove the stopped container
+```
+
+## Testing the REST API
+We can use Postman to test the REST API 
+
+Rest endpoints:
+
+**1. View all users**
+```bash
+Method: GET
+localhost:8089/api/users
+```
+
+**2. View a specific user**
+```bash
+Method: GET
+localhost:8089/api/users/{id}
+```
+
+**3. 1.  Create a user.**
+```bash
+Method: POST
+localhost:8089/api/users
+```
+
+**3. 2. Set the example JSON request in the body raw**
+```bash
+{
+	"firstName" : "Dido",
+	"lastName" : "Petrov",
+	"email" : "dpetrov@yahoo.com"
+}
+```
+
+**3. 3. Set the header property to set the content type as application/json**
+
+**4. 1. Update a user.**
+```bash
+Method: PUT
+localhost:8089/api/users
+```
+
+**4. 2. Set the example JSON request in the body raw**
+```bash
+{
+	"id" : 1,
+	"firstName" : "Petar",
+	"lastName" : "Petrov",
+	"email" : "ppetrov@gmail.com"
+}
+```
+
+**4. 3. Set the header property to set the content type as application/json**
+
+**4. Delete a user.**
+```bash
+Method: DELETE
+localhost:8089/api/users/{id}
+```
+
