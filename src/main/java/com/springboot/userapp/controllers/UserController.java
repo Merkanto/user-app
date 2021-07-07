@@ -47,6 +47,14 @@ public class UserController {
         return user;
     }
 
+    @PutMapping("/users")
+    @ResponseStatus(HttpStatus.OK)
+    public User updateUser (@RequestBody User user) {
+        userService.save(user);
+
+        return user;
+    }
+
     @DeleteMapping("/users/{id}")
     @ResponseStatus(HttpStatus.OK)
     public String deleteUser (@PathVariable int id) {
